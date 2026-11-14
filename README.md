@@ -37,7 +37,7 @@ Preview: http://127.0.0.1:4174. Static files are in `dist/`. Refreshing requires
 - The five educational factor weights remain 35% future rain, 25% past rain, 20% soil, 10% elevation, 10% river rise. Missing river observations produce a bounded score interval, not an estimated probability. Weights and thresholds are not calibrated across countries.
 - New auxiliary displays: next-three-hour rainfall and peak hourly rainfall within the next 24 hours, derived from the same forecast without additional index weight. Gap to official river warning level is explicitly unavailable until a matched gauge and its threshold are connected.
 - Country-specific official water portals are research references only. Their station data has not been ingested. Myanmar references now include an official web bulletin; these references are not ingested as current station observations.
-- OpenFreeMap / OpenStreetMap provides detailed cartographic context. Approximate study envelopes are not administrative boundaries, basin polygons or flood extents. Bundled world outlines are the offline fallback.
+- OpenFreeMap / OpenStreetMap provides detailed cartographic context. Vietnam retains its original study polygons. Every non-Vietnam area is displayed as a 12 km-radius geographic circle. These approximate study areas are not administrative boundaries, basin polygons or flood extents. Bundled world outlines are the offline fallback.
 - Hue and Hoi An retain illustrative facility and storm overlays and OSRM road geometry. No road safety or official evacuation recommendation is provided.
 - IMERG, SMAP, NASADEM, GloFAS, geoBoundaries and ADINet are linked as future research sources, not falsely presented as current inputs.
 

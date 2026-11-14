@@ -28,7 +28,7 @@ const vietnam=VIETNAM_LEGACY.map(original=>{
  return {...context,...original,country:'vietnam',phase:1};
 });
 const catalogue=[...vietnam,...regions.filter(r=>r.country!=='vietnam'),...EXPANDED_REGIONS];
-export const REGIONS=COUNTRIES.flatMap(c=>catalogue.filter(r=>r.country===c.id)).map(r=>({...r,phase:r.phase??COUNTRIES.find(c=>c.id===r.country).phase,subtitle:r.subtitle||r.basin,point:r.point||r.name+' reference point',outline:r.outline||area(...r.center),scenario:r.scenario||{future:100,past:180,soil:.38,elevation:12,riverRise:.18}}));
+export const REGIONS=COUNTRIES.flatMap(c=>catalogue.filter(r=>r.country===c.id)).map(r=>({...r,phase:r.phase??COUNTRIES.find(c=>c.id===r.country).phase,subtitle:r.subtitle||r.basin,point:r.point||r.name+' reference point',outline:r.outline||area(...r.center),studyRadiusMeters:r.country==='vietnam'?null:12000,scenario:r.scenario||{future:100,past:180,soil:.38,elevation:12,riverRise:.18}}));
 export const LEVELS=[{name:'Low',color:'#087c50',soft:'#eaf5ef'},{name:'Watch',color:'#b98500',soft:'#fbf5e3'},{name:'High',color:'#df6818',soft:'#fff0e5'},{name:'Very high',color:'#d33443',soft:'#fbedeb'}];
 export const getRegion=id=>REGIONS.find(r=>r.id===id);
 export const getCountry=id=>COUNTRIES.find(c=>c.id===id);
