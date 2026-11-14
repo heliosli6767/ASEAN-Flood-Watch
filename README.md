@@ -16,7 +16,7 @@ The approved catalogue contains 46 study areas across 11 countries:
 - Myanmar: Hpa-An, Bago, Mandalay, Monywa, Pathein.
 - Singapore: Kallang; Brunei: Bandar Seri Begawan; Timor-Leste: Dili / Comoro.
 
-Ten existing/restored study regions retain the educational screening demonstration. The other 36 display baseline data and specific research gaps; no operational risk index is claimed. All 46 have separate coordinates, API requests and provenance. Selection is a research catalogue, not a flood-danger ranking. Country buttons fit all of that country's study areas; individual area selections zoom in.
+Ten existing/restored study regions retain the educational screening demonstration. The other 36 display a clearly labelled unvalidated trial of the same classroom index, with baseline data and specific research gaps. No operational risk index is claimed. All 46 have separate coordinates, API requests and provenance. Selection is a research catalogue, not a flood-danger ranking. Country buttons fit all of that country's study areas; individual area selections zoom in. Centre badges show the source-data index interval or the storm-scenario score, including on the ASEAN overview. Insufficient data remains a dash. Candidate trial values are also included in exports with explicit validation status.
 
 ## Run and validate
 
