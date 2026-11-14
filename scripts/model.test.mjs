@@ -2,7 +2,8 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readFile} from 'node:fs/promises';
 import {scoreRisk,parseNASA,parseWeather,routeExposure,levelFor,shortRainSignals} from '../dist/model.js';
-import {REGIONS,COUNTRIES,countryRegions} from '../dist/regions.js';
+import {REGIONS,COUNTRIES,countryRegions,countryCities} from '../dist/regions.js';
+import {REGIONS as ORIGINAL_VIETNAM} from '../dist/vietnam-legacy.js';
 
 test('missing inputs produce a bounded interval, never a precise probability',()=>{
  const missing=scoreRisk({});assert.equal(missing.lower,0);assert.equal(missing.upper,100);assert.equal(missing.score,null);
@@ -33,18 +34,27 @@ test('road exposure measures distance against scenario zones without double coun
 test('all bundled regions have usable provenance and source inputs',async()=>{
  const base=new URL('../dist/',import.meta.url);const manifest=JSON.parse(await readFile(new URL('data/manifest.json',base)));
  assert.deepEqual(Object.keys(manifest.regions).sort(),REGIONS.map(r=>r.id).sort());
- for(const sources of Object.values(manifest.regions)){
+ for(const [id,sources] of Object.entries(manifest.regions)){
+  const region=REGIONS.find(r=>r.id===id);
+  for(const key of ['nasa','weather']){const url=new URL(sources[key].url);assert.equal(Number(url.searchParams.get('latitude')),region.center[0]);assert.equal(Number(url.searchParams.get('longitude')),region.center[1]);}
   const nasa=parseNASA(JSON.parse(await readFile(new URL(sources.nasa.file,base))));
   const weather=parseWeather(JSON.parse(await readFile(new URL(sources.weather.file,base))),Date.parse(sources.weather.fetchedAt));
-  assert.notEqual(nasa.past,null);assert.notEqual(weather.future,null);assert.ok(sources.nasa.url.startsWith('https://power.larc.nasa.gov/'));
+  assert.notEqual(nasa.past,null);assert.notEqual(weather.future,null);assert.notEqual(weather.soil,null);assert.notEqual(weather.elevation,null);assert.ok(sources.nasa.url.startsWith('https://power.larc.nasa.gov/'));
  }
 });
-test('country navigation has eight focus areas and five candidates, with isolated local scenarios',()=>{
- assert.equal(COUNTRIES.length,11);assert.equal(REGIONS.filter(r=>r.phase===1).length,8);
- assert.equal(REGIONS.filter(r=>r.phase===2).length,5);assert.equal(new Set(REGIONS.map(r=>r.id)).size,13);
- for(const c of COUNTRIES){assert.ok(countryRegions(c.id).length);assert.ok(countryRegions(c.id).every(r=>r.phase===c.phase));}
+test('approved catalogue contains 46 independent study areas across 11 countries',()=>{
+ assert.equal(COUNTRIES.length,11);assert.equal(REGIONS.filter(r=>r.phase===1).length,10);
+ assert.equal(REGIONS.filter(r=>r.phase===2).length,36);assert.equal(new Set(REGIONS.map(r=>r.id)).size,46);
+ const expected={vietnam:5,cambodia:5,laos:5,thailand:6,philippines:6,indonesia:6,malaysia:5,myanmar:5,singapore:1,brunei:1,'timor-leste':1};
+ for(const c of COUNTRIES)assert.equal(countryRegions(c.id).length,expected[c.id]);
  assert.deepEqual(REGIONS.filter(r=>r.local).map(r=>r.id),['hue','hoian']);
  assert.ok(REGIONS.find(r=>r.id==='jakarta').center[0]<0);
+});
+test('Vietnam keeps all five original configurations and all ten map-only city shortcuts',()=>{
+ assert.deepEqual(countryRegions('vietnam').map(r=>r.id),ORIGINAL_VIETNAM.map(r=>r.id));
+ for(const old of ORIGINAL_VIETNAM){const current=REGIONS.find(r=>r.id===old.id);for(const key of Object.keys(old))assert.deepEqual(current[key],old[key],`${old.id}: ${key}`);}
+ assert.deepEqual(countryCities('vietnam').map(c=>c[1]),['Can Tho','My Tho','Cao Lanh','Ca Mau','Ho Chi Minh City','Hue','Hoi An','Lao Cai','Sa Pa','Ha Giang']);
+ for(const c of COUNTRIES)for(const [id,name,lat,lon] of countryCities(c.id)){assert.ok(REGIONS.some(r=>r.id===id&&r.country===c.id));assert.ok(name&&Number.isFinite(lat)&&Number.isFinite(lon));}
 });
 test('short rain signals preserve missing data instead of inventing a zero or an incomplete peak',()=>{
  const hours=Array.from({length:24},(_,i)=>({rain:i+1}));
