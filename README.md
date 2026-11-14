@@ -2,6 +2,12 @@
 
 An independent student research website for Southeast Asia, derived from the Vietnam Flood Watch interface. It lives in its own project directory and source repository; it does not modify or deploy the Vietnam project.
 
+## Live website
+
+GitHub Pages deploys the contents of `dist/` automatically after every push to `main`:
+
+https://heliosli6767.github.io/ASEAN-Flood-Watch/
+
 ## Research scope
 
 The approved catalogue contains 46 study areas across 11 countries:
@@ -43,10 +49,12 @@ Preview: http://127.0.0.1:4174. Static files are in `dist/`. Refreshing requires
 
 Every source and original request is linked in the website footer. Third-party renderer licenses are retained in `dist/vendor/`.
 
-## Separate deployment
+## Deployment
 
 Private website: https://asean-flood-watch.helios-li6767.chatgpt.site
 
-`.openai/hosting.json` belongs only to the ASEAN Site. A separate public GitHub repository can be connected in the next publishing step; the Vietnam remote and Pages workflow are deliberately not inherited.
+Public GitHub repository: https://github.com/heliosli6767/ASEAN-Flood-Watch
+
+`.openai/hosting.json` belongs only to the private ASEAN Site. GitHub Pages publishes `dist/` independently through `.github/workflows/pages.yml`. The Vietnam repository and deployment remain separate.
 
 NASA and ASEAN do not endorse this independent project. It is not an official warning, flood probability or safe-route service.
